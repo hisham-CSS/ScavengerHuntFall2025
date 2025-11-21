@@ -8,14 +8,10 @@ public class TriggerButtonFade : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        AnimatorStateInfo buttotnAnimStateInfo = buttonAnim.GetCurrentAnimatorStateInfo(0);
+        AnimatorStateInfo buttonAnimStateInfo = buttonAnim.GetCurrentAnimatorStateInfo(0);
+        if (buttonAnimStateInfo.IsName("FadeIn")) return;
+        
         AnimatorStateInfo titleAnimStateInfo = titleAnim.GetCurrentAnimatorStateInfo(0);
-
-        if (buttotnAnimStateInfo.IsName("FadeIn")) return;
-
-        if (titleAnimStateInfo.normalizedTime >= 1)
-        {
-            buttonAnim.SetTrigger("StartFade");
-        }
+        if (titleAnimStateInfo.normalizedTime >= 1) buttonAnim.SetTrigger("StartFade");
     }
 }
