@@ -12,7 +12,7 @@ public class RoomUI : MonoBehaviour
     [SerializeField] private Button startButton;
     [SerializeField] private TMP_Text readyButtonText;
 
-    private List<NetworkLobbyPlayer> players = new List<NetworkLobbyPlayer>();
+    private List<ScavengerHuntLobbyPlayer> players = new List<ScavengerHuntLobbyPlayer>();
 
     private void Start()
     {
@@ -23,21 +23,21 @@ public class RoomUI : MonoBehaviour
 
     private void OnEnable()
     {
-        NetworkLobbyPlayer.OnPlayerSpawned += AddPlayer;
-        NetworkLobbyPlayer.OnPlayerDespawned += RemovePlayer;
-        NetworkLobbyPlayer.OnPlayerListUpdated += UpdateUI;
+        ScavengerHuntLobbyPlayer.OnPlayerSpawned += AddPlayer;
+        ScavengerHuntLobbyPlayer.OnPlayerDespawned += RemovePlayer;
+        ScavengerHuntLobbyPlayer.OnPlayerListUpdated += UpdateUI;
 
         UpdateUI();
     }
 
     private void OnDisable()
     {
-        NetworkLobbyPlayer.OnPlayerSpawned -= AddPlayer;
-        NetworkLobbyPlayer.OnPlayerDespawned -= RemovePlayer;
-        NetworkLobbyPlayer.OnPlayerListUpdated -= UpdateUI;
+        ScavengerHuntLobbyPlayer.OnPlayerSpawned -= AddPlayer;
+        ScavengerHuntLobbyPlayer.OnPlayerDespawned -= RemovePlayer;
+        ScavengerHuntLobbyPlayer.OnPlayerListUpdated -= UpdateUI;
     }
 
-    private void AddPlayer(NetworkLobbyPlayer player)
+    private void AddPlayer(ScavengerHuntLobbyPlayer player)
     {
         Debug.Log($"RoomUI: AddPlayer called for {player.name} (isLocal: {player.isLocalPlayer})");
         if (!players.Contains(player))
@@ -47,7 +47,7 @@ public class RoomUI : MonoBehaviour
         }
     }
 
-    private void RemovePlayer(NetworkLobbyPlayer player)
+    private void RemovePlayer(ScavengerHuntLobbyPlayer player)
     {
         if (players.Contains(player))
         {
@@ -131,7 +131,7 @@ public class RoomUI : MonoBehaviour
         ScavengerHuntNetworkManager.singleton.ServerChangeScene("GameScene"); // Example
     }
 
-    private NetworkLobbyPlayer GetLocalPlayer()
+    private ScavengerHuntLobbyPlayer GetLocalPlayer()
     {
         foreach (var player in players)
         {
