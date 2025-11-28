@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine.XR.ARFoundation;
 using Unity.XR.CoreUtils;
 using UnityEngine.InputSystem.XR;
+using Mirror;
 
 public class ScavengerHuntSetup : EditorWindow
 {
@@ -20,7 +21,7 @@ public class ScavengerHuntSetup : EditorWindow
         }
 
         // 2. Setup XR Origin
-        XROrigin xrOrigin = FindFirstObjectByType<XROrigin>();
+        XROrigin xrOrigin = Object.FindFirstObjectByType<XROrigin>();
         if (xrOrigin == null)
         {
             GameObject xrOriginGO = new GameObject("XR Origin (AR Rig)");
@@ -79,15 +80,58 @@ public class ScavengerHuntSetup : EditorWindow
         if (gameSceneManager == null) gameSceneManager = gameManager.AddComponent<GameSceneManager>();
 
         // 6. Link References
-        // We need to use SerializedObject to set private serialized fields in Editor
         SerializedObject originManagerSO = new SerializedObject(originManager);
         originManagerSO.FindProperty("trackedImageManager").objectReferenceValue = trackedImageManager;
         originManagerSO.FindProperty("arSessionOrigin").objectReferenceValue = xrOrigin.transform;
         originManagerSO.ApplyModifiedProperties();
 
+        // 7. Create and Assign NetworkedCube Prefab
+        string prefabPath = "Assets/Prefabs/NetworkedCube.prefab";
+        if (!System.IO.Directory.Exists("Assets/Prefabs")) System.IO.Directory.CreateDirectory("Assets/Prefabs");
+        
+        GameObject cubePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+        if (cubePrefab == null)
+        {
+            GameObject cubeGO = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cubeGO.name = "NetworkedCube";
+            cubeGO.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f); // 20cm cube
+            cubeGO.AddComponent<NetworkIdentity>();
+            cubeGO.AddComponent<NetworkedCube>();
+            cubePrefab = PrefabUtility.SaveAsPrefabAsset(cubeGO, prefabPath);
+            Object.DestroyImmediate(cubeGO);
+            Debug.Log("Created NetworkedCube Prefab.");
+        }
+
         SerializedObject gameSceneManagerSO = new SerializedObject(gameSceneManager);
-        gameSceneManagerSO.FindProperty("sharedOriginManagerObject").objectReferenceValue = gameManager;
+        gameSceneManagerSO.FindProperty("sharedOriginManagerObject").objectReferenceValue = gameManager; // originManager is on gameManager
+        gameSceneManagerSO.FindProperty("arMarkerPrefab").objectReferenceValue = cubePrefab;
         gameSceneManagerSO.ApplyModifiedProperties();
+
+        // 8. Assign to NetworkManager
+        ScavengerHuntNetworkManager netManager = Object.FindFirstObjectByType<ScavengerHuntNetworkManager>();
+        if (netManager != null)
+        {
+            SerializedObject netSO = new SerializedObject(netManager);
+            SerializedProperty spawnList = netSO.FindProperty("spawnPrefabs");
+            
+            bool exists = false;
+            for (int i = 0; i < spawnList.arraySize; i++)
+            {
+                if (spawnList.GetArrayElementAtIndex(i).objectReferenceValue == cubePrefab)
+                {
+                    exists = true;
+                    break;
+                }
+            }
+            
+            if (!exists)
+            {
+                spawnList.InsertArrayElementAtIndex(spawnList.arraySize);
+                spawnList.GetArrayElementAtIndex(spawnList.arraySize - 1).objectReferenceValue = cubePrefab;
+                netSO.ApplyModifiedProperties();
+                Debug.Log("Assigned NetworkedCube to NetworkManager Spawn List.");
+            }
+        }
 
         Debug.Log("Game Scene Setup Complete! Don't forget to assign a Reference Image Library to the ARTrackedImageManager.");
     }

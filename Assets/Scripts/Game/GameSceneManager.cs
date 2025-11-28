@@ -38,17 +38,24 @@ public class GameSceneManager : NetworkBehaviour
         }
     }
 
+    [Header("Spawning")]
+    [SerializeField] private GameObject arMarkerPrefab; // Assign NetworkedCube prefab here
+
     private void OnOriginSet(Pose pose)
     {
         Debug.Log("[GameSceneManager] Shared Origin Established! Spawning Player...");
         
-        // If we are the client, we tell the server we are ready to be spawned?
-        // Or if we are using NetworkManager's auto-spawn, we might need to disable it and do it manually.
-        // For now, let's assume we just log it.
-        
         if (NetworkClient.active)
         {
             CmdPlayerReady();
+        }
+
+        // Host Logic: Spawn the AR Marker at (0,0,0) to prove the origin is set
+        if (NetworkServer.active && arMarkerPrefab != null)
+        {
+            Debug.Log("[GameSceneManager] Host spawning AR Marker at (0,0,0)");
+            GameObject marker = Instantiate(arMarkerPrefab, Vector3.zero, Quaternion.identity);
+            NetworkServer.Spawn(marker);
         }
     }
 

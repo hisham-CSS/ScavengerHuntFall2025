@@ -379,8 +379,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4966719baa26e4b0e8231a24d9bd491a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FocusMode: 1
-  m_LightEstimationMode: 0
+  m_FocusMode: -1
+  m_LightEstimationMode: -1
   m_AutoFocus: 1
   m_ImageStabilization: 0
   m_LightEstimation: 0
@@ -529,6 +529,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   sharedOriginManagerObject: {fileID: 1971930075}
+  arMarkerPrefab: {fileID: 6147770372208687153, guid: c327675e018b7b945a4eabc604f52da6, type: 3}
 --- !u!114 &1971930078
 MonoBehaviour:
   m_ObjectHideFlags: 0

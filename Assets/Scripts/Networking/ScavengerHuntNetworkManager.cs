@@ -9,10 +9,15 @@ public class ScavengerHuntNetworkManager : NetworkManager
     [Header("UGS Settings")]
     [SerializeField] private string lobbyName = "ScavengerHuntLobby";
     [Scene] [SerializeField] private string gameScene = "GameScene";
+    // spawnPrefabs is already defined in NetworkManager base class
 
     public override void Start()
     {
         base.Start();
+        // spawnPrefabs are automatically registered by NetworkManager if assigned in Inspector
+        // But if we modify the list at runtime (like in Editor script), we might need to ensure they are registered.
+        // Actually, NetworkManager.Start() registers them. Since we call base.Start(), it should be fine.
+        
         // Subscribe to events
         if (AuthenticationManager.Instance != null)
         {
