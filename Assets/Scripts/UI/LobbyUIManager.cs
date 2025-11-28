@@ -92,7 +92,7 @@ public class LobbyUIManager : MonoBehaviour
 
         // For simplicity, we'll just start the host immediately with a default name
         // In a real app, you'd show a popup to enter name/settings
-        ScavengerHuntNetworkManager networkManager = FindObjectOfType<ScavengerHuntNetworkManager>();
+        ScavengerHuntNetworkManager networkManager = FindFirstObjectByType<ScavengerHuntNetworkManager>();
         if (networkManager != null)
         {
             networkManager.StartHostWithRelay();

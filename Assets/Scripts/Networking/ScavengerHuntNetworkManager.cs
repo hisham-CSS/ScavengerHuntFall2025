@@ -78,7 +78,7 @@ public class ScavengerHuntNetworkManager : NetworkManager
         StartClient();
     }
 
-    public async void JoinRandomGame()
+    public async void JoinRandomGame_Debug()
     {
         var lobbies = await LobbyManager.Instance.ListLobbies();
         if (lobbies.Count > 0)
@@ -90,5 +90,40 @@ public class ScavengerHuntNetworkManager : NetworkManager
         {
             Debug.Log("No lobbies found.");
         }
+    }
+    // Player Data Persistence
+    public Dictionary<int, string> playerNames = new Dictionary<int, string>();
+
+    public void SetPlayerName(int connId, string name)
+    {
+        if (playerNames.ContainsKey(connId))
+            playerNames[connId] = name;
+        else
+            playerNames.Add(connId, name);
+            
+        Debug.Log($"[NetworkManager] Stored name '{name}' for connection {connId}");
+    }
+
+    public override void OnServerAddPlayer(NetworkConnectionToClient conn)
+    {
+        // Manual instantiation to set SyncVars BEFORE spawning
+        Transform startPos = GetStartPosition();
+        GameObject player = startPos != null
+            ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
+            : Instantiate(playerPrefab);
+
+        // Restore player name if it exists
+        if (playerNames.TryGetValue(conn.connectionId, out string name))
+        {
+            var lobbyPlayer = player.GetComponent<ScavengerHuntLobbyPlayer>();
+            if (lobbyPlayer != null)
+            {
+                lobbyPlayer.PlayerName = name;
+                Debug.Log($"[NetworkManager] Restored name '{name}' for player {conn.connectionId} BEFORE spawn.");
+            }
+        }
+
+        // Now spawn the player - SyncVars will be sent in the spawn message
+        NetworkServer.AddPlayerForConnection(conn, player);
     }
 }

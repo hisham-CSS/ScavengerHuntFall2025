@@ -1763,19 +1763,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 824518781}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1593075901}
-        m_TargetAssemblyTypeName: ScavengerHuntNetworkManager, Assembly-CSharp
-        m_MethodName: JoinRandomGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: ScavengerHuntLobby
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &824518781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2433,7 +2421,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.84188825}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -100}
+  m_AnchoredPosition: {x: 0, y: -187}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &1159304711
@@ -2555,7 +2543,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 0, w: 44.411526}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -3225,7 +3213,7 @@ GameObject:
   - component: {fileID: 1593075903}
   - component: {fileID: 1593075902}
   - component: {fileID: 1593075901}
-  - component: {fileID: 1593075899}
+  - component: {fileID: 1593075906}
   m_Layer: 0
   m_Name: NetworkServices
   m_TagString: Untagged
@@ -3233,35 +3221,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1593075899
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1593075898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  port: 7777
-  DualMode: 1
-  NoDelay: 1
-  Interval: 10
-  Timeout: 10000
-  RecvBufferSize: 7361536
-  SendBufferSize: 7361536
-  FastResend: 2
-  ReceiveWindowSize: 4096
-  SendWindowSize: 4096
-  MaxRetransmit: 40
-  MaximizeSocketBuffers: 1
-  ReliableMaxMessageSize: 297433
-  UnreliableMaxMessageSize: 1194
-  debugLog: 0
-  statisticsGUI: 0
-  statisticsLog: 0
 --- !u!114 &1593075901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3282,7 +3241,7 @@ MonoBehaviour:
   offlineScene: 
   onlineScene: 
   offlineSceneLoadDelay: 0
-  transport: {fileID: 1593075899}
+  transport: {fileID: 1593075906}
   networkAddress: localhost
   maxConnections: 4
   disconnectInactiveConnections: 0
@@ -3308,7 +3267,7 @@ MonoBehaviour:
   evaluationInterval: 3
   timeInterpolationGui: 0
   lobbyName: ScavengerHuntLobby
-  gameScene: 
+  gameScene: Assets/Scenes/GameScene.unity
 --- !u!114 &1593075902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3360,6 +3319,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1593075906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593075898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10d9cca0159e0b243903b68ada9169d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxConnections: 100
 --- !u!1 &1655624568
 GameObject:
   m_ObjectHideFlags: 0

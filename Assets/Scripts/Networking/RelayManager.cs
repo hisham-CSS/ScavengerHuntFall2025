@@ -35,8 +35,24 @@ public class RelayManager : MonoBehaviour
             Debug.Log($"Relay Created. Join Code: {joinCode}");
             OnRelayCreated?.Invoke(joinCode);
 
-            // TODO: Pass allocation data to Transport
-            // Transport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
+            // Pass allocation data to Transport
+            var transport = FindFirstObjectByType<MirrorUnityTransport>();
+            if (transport != null)
+            {
+                transport.SetRelayData(
+                    allocation.RelayServer.IpV4,
+                    (ushort)allocation.RelayServer.Port,
+                    allocation.AllocationIdBytes,
+                    allocation.Key,
+                    allocation.ConnectionData,
+                    null, // Host doesn't need HostConnectionData
+                    false // Default to UDP (insecure) for now
+                );
+            }
+            else
+            {
+                Debug.LogWarning("MirrorUnityTransport not found. Relay data not set on Transport.");
+            }
 
             return joinCode;
         }
@@ -55,8 +71,24 @@ public class RelayManager : MonoBehaviour
             Debug.Log($"Joined Relay with code: {joinCode}");
             OnRelayJoined?.Invoke(joinCode);
 
-            // TODO: Pass join allocation data to Transport
-            // Transport.SetClientRelayData(joinAllocation.RelayServer.IpV4, (ushort)joinAllocation.RelayServer.Port, joinAllocation.AllocationIdBytes, joinAllocation.Key, joinAllocation.ConnectionData, joinAllocation.HostConnectionData);
+            // Pass join allocation data to Transport
+            var transport = FindFirstObjectByType<MirrorUnityTransport>();
+            if (transport != null)
+            {
+                transport.SetRelayData(
+                    joinAllocation.RelayServer.IpV4,
+                    (ushort)joinAllocation.RelayServer.Port,
+                    joinAllocation.AllocationIdBytes,
+                    joinAllocation.Key,
+                    joinAllocation.ConnectionData,
+                    joinAllocation.HostConnectionData,
+                    false // Default to UDP (insecure) for now
+                );
+            }
+            else
+            {
+                Debug.LogWarning("MirrorUnityTransport not found. Relay data not set on Transport.");
+            }
         }
         catch (RelayServiceException e)
         {

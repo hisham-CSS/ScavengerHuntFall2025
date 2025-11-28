@@ -18,6 +18,12 @@ public class ScavengerHuntLobbyPlayer : NetworkBehaviour
     {
         OnPlayerSpawned?.Invoke(this);
         OnPlayerListUpdated?.Invoke();
+
+        // If we are the local player and the name is empty (e.g. testing in GameScene directly), set a default name
+        if (isLocalPlayer && string.IsNullOrEmpty(PlayerName))
+        {
+            CmdSetPlayerName($"Player {netId}");
+        }
     }
 
     public override void OnStopClient()
@@ -30,6 +36,11 @@ public class ScavengerHuntLobbyPlayer : NetworkBehaviour
     public void CmdSetPlayerName(string name)
     {
         PlayerName = name;
+        // Save to NetworkManager for persistence across scene changes
+        if (NetworkManager.singleton is ScavengerHuntNetworkManager manager)
+        {
+            manager.SetPlayerName(connectionToClient.connectionId, name);
+        }
     }
 
     [Command]

@@ -57,7 +57,7 @@ public class LobbyListUI : MonoBehaviour
 
     private void JoinLobby(string lobbyId)
     {
-        ScavengerHuntNetworkManager networkManager = FindObjectOfType<ScavengerHuntNetworkManager>();
+        ScavengerHuntNetworkManager networkManager = FindFirstObjectByType<ScavengerHuntNetworkManager>();
         if (networkManager != null)
         {
             networkManager.JoinGameWithRelay(lobbyId);
